@@ -1,8 +1,6 @@
 package com.nelioalves.cursomc.resources;
 
 import java.net.URI;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import javax.validation.Valid;
 
@@ -17,58 +15,54 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.nelioalves.cursomc.domain.Categoria;
-import com.nelioalves.cursomc.dto.CategoriaDTO;
-import com.nelioalves.cursomc.services.CategoriaService;
+import com.nelioalves.cursomc.domain.Cliente;
+import com.nelioalves.cursomc.dto.ClienteDTO;
+import com.nelioalves.cursomc.dto.ClienteNewDTO;
+import com.nelioalves.cursomc.services.ClienteService;
 import com.nelioalves.cursomc.services.exceptions.ObjectNotFoundException;
 
 
 @RestController
-@RequestMapping(value="/categorias")
-public class CategoriaResource  {
+@RequestMapping(value = "/clientes")
+public class ClienteResource {
+
 	@Autowired
-	private CategoriaService service;
-	
-	@RequestMapping(value="/{id}",method=RequestMethod.GET)
-	public ResponseEntity<Categoria> find(@PathVariable Integer id) throws ObjectNotFoundException {
-		Categoria obj = service.find(id);
-		return   ResponseEntity.ok().body(obj);
-	} 
-	@RequestMapping(method=RequestMethod.GET)
-	public ResponseEntity<List<CategoriaDTO>> find( ) throws ObjectNotFoundException {
-		List<Categoria> list = service.findAll();
-		List<CategoriaDTO> listDTO = list.stream().map(obj-> new CategoriaDTO(obj)).collect(Collectors.toList());
-		return   ResponseEntity.ok().body(listDTO);
-	} 
+	private ClienteService clienteService;
+
+	@RequestMapping(value = "/{id}", method = RequestMethod.GET)
+	public ResponseEntity<?> find(@PathVariable Integer id) throws ObjectNotFoundException {
+		Cliente obj = clienteService.find(id);
+		return ResponseEntity.ok().body(obj);
+	}
 	@RequestMapping(method=RequestMethod.POST)
-	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO obj){
-		Categoria objCat = service.insert(service.fromDTO(obj));
-		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objCat.getId()).toUri();
+	public ResponseEntity<Void> insert(@Valid @RequestBody ClienteNewDTO obj){
+		Cliente objCli = clienteService.insert(clienteService.fromDTO(obj));
+		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objCli.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
-	public ResponseEntity<Void> update(@RequestBody CategoriaDTO obj, @PathVariable Integer id) {
-		obj.setId(id);
-//		Categoria objCat=
-				service.update(service.fromDTO(obj));
+	public ResponseEntity<Void> update(@RequestBody ClienteDTO objDTO, @PathVariable Integer id) {
+		objDTO.setId(id);
+//		Cliente obj= 
+				clienteService.update(clienteService.fromDTO(objDTO));
 		return ResponseEntity.noContent().build();
 		
 	}
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete( @PathVariable Integer id) {
-	 	service.delete(id);
+		clienteService.delete(id);
 	 	return ResponseEntity.noContent().build();
 	}
+	
 	@RequestMapping(value="/page",method=RequestMethod.GET)
-	public ResponseEntity<Page<CategoriaDTO>> findPage(
+	public ResponseEntity<Page<ClienteDTO>> findPage(
 													@RequestParam(name="page",defaultValue="0") Integer page,
 													@RequestParam(name="linesPerPage",defaultValue="24") Integer linesPerPage,
 													@RequestParam(name="orderBy",defaultValue="nome") String orderBy,
 													@RequestParam(name="direction",defaultValue="ASC")String direction) throws ObjectNotFoundException {
-		Page<Categoria> list = service.findPage(page, linesPerPage, orderBy, direction);
-		Page<CategoriaDTO> listDTO = list.map(obj-> new CategoriaDTO(obj));
+		Page<Cliente> list = clienteService.findPage(page, linesPerPage, orderBy, direction);
+		Page<ClienteDTO> listDTO = list.map(obj-> new ClienteDTO(obj));
 		return   ResponseEntity.ok().body(listDTO);
 	} 
     
-
 }
