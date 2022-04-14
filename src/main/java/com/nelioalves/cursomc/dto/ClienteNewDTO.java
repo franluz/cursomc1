@@ -7,6 +7,7 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
+import com.nelioalves.cursomc.domain.enums.TipoCliente;
 import com.nelioalves.cursomc.services.validation.ClienteInsert;
 @ClienteInsert
 public class ClienteNewDTO implements Serializable {/**
@@ -35,9 +36,16 @@ public class ClienteNewDTO implements Serializable {/**
 	private String telefone2;
 	private String telefone3;
 	private Integer cidadeId;
+	private Integer tipo;
 	
 	public Integer getCidadeId() {
 		return cidadeId;
+	}
+	public Integer getTipo() {
+		return tipo;
+	}
+	public void setTipo(Integer tipo) {
+		this.tipo = tipo;
 	}
 	public void setCidadeId(Integer cidadeId) {
 		this.cidadeId = cidadeId;

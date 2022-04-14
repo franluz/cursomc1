@@ -11,59 +11,59 @@ import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.nelioalves.cursomc.domain.enums.EstadoPagamento;
-@Entity
-@Inheritance(strategy=InheritanceType.JOINED) 
-public abstract  class Pagamento implements Serializable {
 
-	/**
-	 * 
-	 */
+@Entity
+@Inheritance(strategy=InheritanceType.JOINED)
+@JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.PROPERTY, property = "@type")
+public abstract class Pagamento implements Serializable {
 	private static final long serialVersionUID = 1L;
+	
 	@Id
 	private Integer id;
 	private Integer estado;
-	@JoinColumn(name="pedido_id",referencedColumnName ="id")
-	@OneToOne
-	@MapsId
+
 	@JsonIgnore
+	@OneToOne
+	@JoinColumn(name="pedido_id")
+	@MapsId
 	private Pedido pedido;
-	/**
-	 * @param id
-	 * @param estado
-	 * @param pedido
-	 */
+	
+	public Pagamento() {
+	}
+
 	public Pagamento(Integer id, EstadoPagamento estado, Pedido pedido) {
 		super();
 		this.id = id;
-		this.estado = (estado == null) ? null : estado.getId();
+		this.estado = (estado==null) ? null : estado.getCod();
 		this.pedido = pedido;
 	}
-	/**
-	 * 
-	 */
-	public Pagamento() {
-		super();
-		// TODO Auto-generated constructor stub
-	}
+
 	public Integer getId() {
 		return id;
 	}
+
 	public void setId(Integer id) {
 		this.id = id;
 	}
+
 	public EstadoPagamento getEstado() {
 		return EstadoPagamento.toEnum(estado);
 	}
+
 	public void setEstado(EstadoPagamento estado) {
-		this.estado = estado.getId();
+		this.estado = estado.getCod();
 	}
+
 	public Pedido getPedido() {
 		return pedido;
 	}
+
 	public void setPedido(Pedido pedido) {
 		this.pedido = pedido;
 	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -71,6 +71,7 @@ public abstract  class Pagamento implements Serializable {
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
+
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
@@ -87,4 +88,7 @@ public abstract  class Pagamento implements Serializable {
 			return false;
 		return true;
 	}
+	
+	
+	
 }
