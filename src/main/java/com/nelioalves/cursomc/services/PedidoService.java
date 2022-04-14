@@ -36,6 +36,8 @@ public class PedidoService {
 	
 	@Autowired
 	private ClienteRepository clienteRepository;
+	@Autowired
+	private EmailService emailService;
 	
 //	@Autowired
 //	private EmailService emailService;
@@ -68,7 +70,7 @@ public class PedidoService {
 			ip.setPedido(pedido);
 		}
 		itemPedidoRepository.saveAll(pedido.getItens());
-//		emailService.sendOrderConfirmationEmail(obj);
+		emailService.sendOrderConfirmationEmail(pedido);
 		return pedido;
 	}
 	

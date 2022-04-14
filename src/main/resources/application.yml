@@ -3,3 +3,6 @@ spring:
     active: test
 server:
   port: 8081
+default:
+  sender: francielle.luz@gmail.com
+  recipient: francielle.luz@gmail.com
