@@ -1,6 +1,30 @@
 spring:
   profiles:
     active: test
+  mail:
+    properties:
+      mail:
+        smtp:
+          socketFactory:
+            port: '465'
+            class: javax.net.ssl.SSLSocketFactory
+            fallback: 'false'
+          starttls:
+            enable: 'true'
+          ssl:
+            enable: 'true'
+          auth: 'true'
+    host: smtp.gmail.com
+    username: 'francielle.luz@gmail.com'
+    password: 'sqnkfsxfcuzmaauy'
+  jpa:
+    properties:
+      hibernate:
+        format_sql: 'true'
+    hibernate:
+      ddl-auto: create
+    show-sql: 'true'
+
 server:
   port: 8081
 default:
