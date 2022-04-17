@@ -7,7 +7,6 @@ import javax.validation.constraints.NotEmpty;
 
 import org.hibernate.validator.constraints.Length;
 
-import com.nelioalves.cursomc.domain.enums.TipoCliente;
 import com.nelioalves.cursomc.services.validation.ClienteInsert;
 @ClienteInsert
 public class ClienteNewDTO implements Serializable {/**
@@ -37,7 +36,15 @@ public class ClienteNewDTO implements Serializable {/**
 	private String telefone3;
 	private Integer cidadeId;
 	private Integer tipo;
+	@NotEmpty(message="Campo obrigatório")
+	private String senha;
 	
+	public String getSenha() {
+		return senha;
+	}
+	public void setSenha(String senha) {
+		this.senha = senha;
+	}
 	public Integer getCidadeId() {
 		return cidadeId;
 	}
