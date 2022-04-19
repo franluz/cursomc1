@@ -3,12 +3,14 @@ package com.nelioalves.cursomc.services.validation;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.ConstraintValidator;
 import javax.validation.ConstraintValidatorContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.servlet.HandlerMapping;
 
 import com.nelioalves.cursomc.domain.Cliente;
@@ -35,10 +37,13 @@ public class ClienteUpdateValidator implements ConstraintValidator<ClienteUpdate
 		Map<String,String> map = (Map<String,String>)request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
 		Integer uriId = Integer.parseInt(map.get("id"));
 
-		Cliente aux = clienteRepository.findByEmail(objDto.getEmail());
-		System.out.println("ID AUX: "+aux.getId());
+		Optional<Cliente> aux = clienteRepository.findByEmail(objDto.getEmail());
+		if(!aux.isPresent()) {
+			throw new UsernameNotFoundException("Erro ao buscar e-mail");
+		}
+		System.out.println("ID AUX: "+aux.get().getId());
 		System.out.println("ID URL: "+uriId);
-		if(aux != null && !aux.getId().equals(uriId) ) {
+		if(aux != null && !aux.get().getId().equals(uriId) ) {
 			list.add(new FieldMessage("email","E-mail já cadastrado!"));
 		}
 

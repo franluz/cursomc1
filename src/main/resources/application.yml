@@ -30,3 +30,6 @@ server:
 default:
   sender: francielle.luz@gmail.com
   recipient: francielle.luz@gmail.com
+jwt:
+ secret: SequenciaDecaracteresAssinarToken
+ expiration: 600000
