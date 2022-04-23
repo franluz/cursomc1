@@ -40,6 +40,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 			"/produtos/**",
 			"/categorias/**"
 	};
+	private static final String[] PUBLIC_MATCHES_POST= {
+			"/clientes/**",
+			"/auth/forgot/**"
+	};
 
 	protected void configure(HttpSecurity http) throws Exception{
 		if(Arrays.asList(env.getActiveProfiles()).contains("test")) {
@@ -49,6 +53,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		http.cors().and().csrf().disable();
 		http.authorizeRequests()
 		.antMatchers(PUBLIC_MATCHES).permitAll()
+		.antMatchers(PUBLIC_MATCHES_POST).permitAll()
 		.antMatchers(HttpMethod.GET, PUBLIC_MATCHES_GET)
 		.permitAll()
 		.anyRequest()
