@@ -9,6 +9,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,12 +41,14 @@ public class CategoriaResource  {
 		List<CategoriaDTO> listDTO = list.stream().map(obj-> new CategoriaDTO(obj)).collect(Collectors.toList());
 		return   ResponseEntity.ok().body(listDTO);
 	} 
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(method=RequestMethod.POST)
 	public ResponseEntity<Void> insert(@Valid @RequestBody CategoriaDTO obj){
 		Categoria objCat = service.insert(service.fromDTO(obj));
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(objCat.getId()).toUri();
 		return ResponseEntity.created(uri).build();
 	}
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}",method=RequestMethod.PUT)
 	public ResponseEntity<Void> update(@RequestBody CategoriaDTO obj, @PathVariable Integer id) {
 		obj.setId(id);
@@ -54,6 +57,7 @@ public class CategoriaResource  {
 		return ResponseEntity.noContent().build();
 		
 	}
+	@PreAuthorize("hasAnyRole('ADMIN')")
 	@RequestMapping(value="/{id}",method=RequestMethod.DELETE)
 	public ResponseEntity<Void> delete( @PathVariable Integer id) {
 	 	service.delete(id);
